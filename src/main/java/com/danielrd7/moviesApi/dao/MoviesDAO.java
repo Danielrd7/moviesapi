@@ -1,0 +1,63 @@
+package com.danielrd7.moviesApi.dao;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.danielrd7.moviesApi.mapper.MovieMapper;
+import com.danielrd7.moviesApi.repository.MovieRepository;
+import com.danielrd7.moviesApi.vo.MovieVO;
+
+/**
+ * Data access component that coordinates movie persistence operations.
+ *
+ * @author Enrique Sanchez
+ */
+@Repository
+public class MoviesDAO {
+    /**
+     * Repository dependency used for movie persistence operations.
+     */
+    @Autowired
+    private MovieRepository movieRepository;
+
+    /**
+     * Finds a movie by id.
+     *
+     * @param id movie identifier
+     * @return optional movie representation
+     */
+    public Optional<MovieVO> findById(Long id) {
+        return movieRepository.findById(id).map(MovieMapper::toVO);
+    }
+
+    /**
+     * Retrieves all movies currently stored.
+     *
+     * @return list of movies
+     */
+    public List<MovieVO> findAll() {
+        return movieRepository.findAll().stream().map(MovieMapper::toVO).toList();
+    }
+
+    /**
+     * Persists a movie and returns the stored representation.
+     *
+     * @param movieVO movie to persist
+     * @return persisted movie
+     */
+    public MovieVO save(MovieVO movieVO) {
+        return MovieMapper.toVO(movieRepository.save(MovieMapper.toEntity(movieVO)));
+    }
+
+    /**
+     * Deletes a movie by id.
+     *
+     * @param id movie identifier
+     */
+    public void deleteById(Long id) {
+        movieRepository.deleteById(id);
+    }
+}
