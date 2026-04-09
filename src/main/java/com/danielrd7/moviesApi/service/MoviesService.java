@@ -1,7 +1,6 @@
 package com.danielrd7.moviesApi.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class MoviesService {
      * @param id movie identifier
      * @return optional movie representation
      */
-    public Optional<MovieVO> findById(Long id) {
+    public MovieVO findById(Long id) {
         return moviesDAO.findById(id);
     }
 
@@ -39,5 +38,15 @@ public class MoviesService {
      */
     public List<MovieVO> findAll() {
         return moviesDAO.findAll();
+    }
+
+    /**
+     * Adds a new movie to the persistence layer.
+     *
+     * @param movieVO movie payload to persist
+     * @return persisted movie representation or {@code null} when the input is {@code null}
+     */
+    public MovieVO add(MovieVO movieVO) {
+        return moviesDAO.save(movieVO);
     }
 }

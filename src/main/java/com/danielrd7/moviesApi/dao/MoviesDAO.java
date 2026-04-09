@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.danielrd7.moviesApi.Exeption.ItemNotFoundExeption;
+import com.danielrd7.moviesApi.entity.MovieEntity;
 import com.danielrd7.moviesApi.mapper.MovieMapper;
 import com.danielrd7.moviesApi.repository.MovieRepository;
 import com.danielrd7.moviesApi.vo.MovieVO;
@@ -29,8 +31,14 @@ public class MoviesDAO {
      * @param id movie identifier
      * @return optional movie representation
      */
-    public Optional<MovieVO> findById(Long id) {
-        return movieRepository.findById(id).map(MovieMapper::toVO);
+    public MovieVO findById(Long id) {
+        Optional<MovieVO> movieVO = movieRepository.findById(id).map(MovieMapper::toVO);
+
+        if (movieVO.isEmpty()) {
+            throw new ItemNotFoundExeption("Movie with id " + id + " not found");
+        }
+
+        return movieVO.get();
     }
 
     /**
@@ -46,10 +54,17 @@ public class MoviesDAO {
      * Persists a movie and returns the stored representation.
      *
      * @param movieVO movie to persist
-     * @return persisted movie
+     * @return persisted movie or {@code null} when the input is {@code null}
      */
     public MovieVO save(MovieVO movieVO) {
-        return MovieMapper.toVO(movieRepository.save(MovieMapper.toEntity(movieVO)));
+        MovieEntity movieEntity = MovieMapper.toEntity(movieVO);
+        if (movieEntity == null) {
+            return null;
+        }
+        if (movieEntity.getId() == null) {
+            movieEntity.setNew(true);
+        }
+        return MovieMapper.toVO(movieRepository.save(movieEntity));
     }
 
     /**
