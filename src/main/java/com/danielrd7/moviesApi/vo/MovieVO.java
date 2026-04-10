@@ -5,15 +5,27 @@ import java.time.LocalDate;
 
 import com.danielrd7.moviesApi.enumeration.Rating;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class MovieVO implements Serializable {
     
     private static final long serialVersionUID = 1739406000000L;
     
     private Long id;
+    @NotBlank (message = "Name is needed")
     private String name;
+    @NotNull (message = "Launch date is needed")
     private LocalDate launchDate;
+    @NotNull (message = "Duration is needed")
     private Integer duration;
     private Rating rating;
+    @Pattern(
+            regexp = "^(?!.(?i)(?:--|;|/\\|\\/|\\b(?:select|insert|update|delete|drop|truncate|alter|union|exec|execute|xp_)\\b|\\bor\\b\\s+\\d+=\\d+|\\band\\b\\s+\\d+=\\d+)).$",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Description contains invalid characters"
+    )
     private String description;
     
     public MovieVO() {
