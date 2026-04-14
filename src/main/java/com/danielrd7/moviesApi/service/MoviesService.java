@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.danielrd7.moviesApi.Exeption.DuplicatedItemExeption;
+import com.danielrd7.moviesApi.Exeption.ItemNotFoundExeption;
 import com.danielrd7.moviesApi.dao.MoviesDAO;
 import com.danielrd7.moviesApi.vo.MovieVO;
 
@@ -47,6 +49,13 @@ public class MoviesService {
      * @return persisted movie representation or {@code null} when the input is {@code null}
      */
     public MovieVO add(MovieVO movieVO) {
-        return moviesDAO.save(movieVO);
+        try {
+            moviesDAO.findByNameAndLaunchDate(movieVO.getName(), movieVO.getLaunchDate());
+            throw new DuplicatedItemExeption("Movie with name " + movieVO.getName() + 
+                " and launch date " + movieVO.getLaunchDate() + " already exists");
+        } catch (final ItemNotFoundExeption infe) {
+            // Movie not found, proceed with creation
+            return moviesDAO.save(movieVO);
+        }
     }
 }
