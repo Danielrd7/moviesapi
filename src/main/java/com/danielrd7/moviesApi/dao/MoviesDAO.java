@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.danielrd7.moviesApi.Exeption.ItemNotFoundExeption;
 import com.danielrd7.moviesApi.entity.MovieEntity;
+import com.danielrd7.moviesApi.Exeption.ItemNotFoundExeption;
 import com.danielrd7.moviesApi.mapper.MovieMapper;
 import com.danielrd7.moviesApi.repository.MovieRepository;
 import com.danielrd7.moviesApi.vo.MovieVO;
@@ -71,6 +71,7 @@ public class MoviesDAO {
 
     /**
      * Persists a movie and returns the stored representation.
+     * This method supports both create and update operations.
      *
      * @param movieVO movie to persist
      * @return persisted movie or {@code null} when the input is {@code null}

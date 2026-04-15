@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.danielrd7.moviesApi.entity.MovieEntity;
 
+import java.util.Optional;
+
 /**
  * Repository for CRUD operations over {@link MovieEntity}.
  *
@@ -21,5 +23,5 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
      * @param launchDate movie release date
      * @return matching movie entity or {@code null} when no record matches
      */
-    MovieEntity findByNameAndLaunchDate(String name, LocalDate launchDate);
+    Optional<MovieEntity> findByNameAndLaunchDate(String name, LocalDate launchDate);
 }
